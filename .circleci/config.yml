@@ -73,7 +73,7 @@ jobs:
 
   test-frontend:
     docker:
-       Docker image here
+      # Docker image here
       - image: circleci/node:13.8.0
     steps:
        # Checkout code from git
