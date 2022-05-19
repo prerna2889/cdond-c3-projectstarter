@@ -165,6 +165,7 @@ jobs:
     docker:
       # Docker image here that supports AWS CLI
       - image: amazon/aws-cli
+      #- image: << pipeline.parameters.py_alp_image >>
     steps:
       # Checkout code from git
       - checkout
