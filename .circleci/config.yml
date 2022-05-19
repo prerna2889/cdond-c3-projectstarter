@@ -129,10 +129,8 @@ jobs:
             cd frontend
             npm install
             # npm install oauth-sign@^0.9.0
-            npm audit --audit-level=critical
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-scan 
+            npm audit --audit-level=critical > audit.log
+            tail audit.log -n 200
           
   scan-backend:
     docker:
@@ -151,10 +149,8 @@ jobs:
             cd backend
             npm install
             # npm install oauth-sign@^0.9.0
-            npm audit --audit-level=critical
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-scan 
+            npm audit --audit-level=critical > audit.log
+            tail audit.log -n 200
 
 #  deploy-infrastructure:
 #    docker:
