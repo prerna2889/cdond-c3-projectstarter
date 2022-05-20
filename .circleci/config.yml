@@ -273,10 +273,8 @@ jobs:
             cd backend
             sudo apt update
             sudo apt install -y awscli
-            npm cache clean --force
-            node_modules
-            delete node_modules
-            delete package-lock.json
+            npm cache clean
+            deleting package-lock.json
             npm install
             npm install --save-dev ts-loader@9.2.6
             npm update path-parse
