@@ -274,7 +274,6 @@ jobs:
             sudo apt update
             sudo apt install -y awscli
             npm cache clean --force
-            deleting package-lock.json
             npm install
             npm install --save-dev ts-loader@9.2.6
             npm update path-parse
