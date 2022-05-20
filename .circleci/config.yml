@@ -14,6 +14,7 @@ commands:
           when: on_fail
           command: |
             # Your code here
+            echo "udapeople-frontend-${CIRCLE_WORKFLOW_ID}"
             aws cloudformation delete-stack \
                 --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID}"
             aws cloudformation delete-stack \
@@ -222,8 +223,9 @@ jobs:
             apk update
             apk upgrade
             apk add unzip 
+            apk add python3
             apk add curl
-            /usr/local/bin/python -m pip install --upgrade pip      
+            /usr/local/bin/python -m pip install --upgrade pip
 #            exit 1
       - run:
           name: Install ansible
