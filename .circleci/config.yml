@@ -219,10 +219,24 @@ jobs:
           name: Install dependencies
           command: |
             # Your code here
-            apk add --no-cache curl
-            apk add --no-cache --upgrade bash
-            apk add --update ansible
+            apk update
+            apk upgrade
+            apk add unzip 
+            apk add curl
+            /usr/local/bin/python -m pip install --upgrade pip      
 #            exit 1
+      - run:
+          name: Install ansible
+          command: |
+            # your code here              
+            apk add --update ansible 
+            ansible --version
+      - run:
+          name: Install aws
+          command: |
+            # your code here                           
+            pip install awscli --upgrade   
+            aws --version       
       - run:
           name: Configure server
           command: |
