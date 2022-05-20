@@ -192,7 +192,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             # Your code here
-            echo [web] > inventory.txt
+            #echo [web] > inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
@@ -203,23 +203,45 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment     
 
-#  configure-infrastructure:
-#    docker:
+  configure-infrastructure:
+    docker:
       # Docker image here that supports Ansible
-#      - image: python:3.7-alpine3.11
-#    steps:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["37:b8:2a:d6:3a:a2:72:f7:93:52:90:c4:ca:7d:2a:9e"]
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
-#      - run:
-#          name: Install dependencies
-#          command: |
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
             # Your code here
+            apk add --no-cache curl
+            apk add --no-cache --upgrade bash
+            apk add --update ansible
 #            exit 1
-#      - run:
-#          name: Configure server
-#          command: |
+      - run:
+          name: Configure server
+          command: |
             # Your code here
+            echo ENVIROMENT=$ENVIROMENT > "backend/.env"
+            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> "backend/.env"
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
+            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> "backend/.env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
+            cd .circleci/ansible
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment      
 #            exit 1
       # Here's where you will add some code to rollback on failure      
 
@@ -360,8 +382,8 @@ workflows:
           filters:
             branches:
               only: [master]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+       - configure-infrastructure:
+           requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
