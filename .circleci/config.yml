@@ -300,7 +300,7 @@ jobs:
       - revert-migrations
 
   deploy-frontend:
-   docker:
+    docker:
       # Docker image here that supports AWS CLI
       - image: amazon/aws-cli
     steps:
