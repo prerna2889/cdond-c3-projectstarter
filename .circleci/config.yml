@@ -278,6 +278,7 @@ jobs:
 
       - run:
           name: Run migrations
+          working_directory: ./backend
           command: |
             # Your code here
             # Run and save the migration output
