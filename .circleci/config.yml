@@ -226,10 +226,8 @@ jobs:
             apk update
             apk upgrade
             apk add unzip 
-            apk add python3
             apk add curl
             /usr/local/bin/python -m pip install --upgrade pip
-#            exit 1
       - run:
           name: Install ansible
           command: |
@@ -239,9 +237,9 @@ jobs:
       - run:
           name: Install aws
           command: |
-            # your code here                           
-            pip install awscli --upgrade   
-            aws --version       
+            # your code here
+            pip install awscli --upgrade
+            aws --version
       - run:
           name: Configure server
           command: |
