@@ -4,10 +4,10 @@
     state: directory
     mode: 0755
 
-# - name: Extract 'artifact.tar.gz' into '/home/ec2-user/backend'
-#   ansible.builtin.unarchive:
-#     src: ~/project/artifact.tar.gz
-#     dest: /home/ec2-user/backend
+- name: Extract 'artifact.tar.gz' into '/home/ec2-user/backend'
+  ansible.builtin.unarchive:
+    src: ~/project/artifact.tar.gz
+    dest: /home/ec2-user/backend
 
 - name: 'wait 60 seconds for target connection to become reachable/usable.'
   wait_for_connection:
