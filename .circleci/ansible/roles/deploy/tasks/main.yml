@@ -1,6 +1,7 @@
 ---
 - name: "install dependencies."
   become: true
+  #install nodejs
   apt:
     name: ["nodejs", "npm"]
     state: latest
