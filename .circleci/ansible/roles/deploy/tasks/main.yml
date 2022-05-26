@@ -1,56 +1,20 @@
 ---
-- name: "install dependencies."
-  become: true
-  #install nodejs
-  apt:
-    name: ["nodejs", "npm"]
-    state: latest
-    update_cache: yes
+  - name: copy
+    become: true
+    copy:
+      src:  /root/project/artifact.tar.gz
+      dest: /home/ubuntu/artifact.tar.gz 
+      
 
-- name: "install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
-
-- name: Creates directory
-  file:
-    path: /home/ec2-user/backend
-    state: directory
-
-- name: Copy backend dist files web server
-  ansible.builtin.unarchive:
-    src: artifact.tar.gz
-    dest: /home/ec2-user/backend
-
-- name: Uncompress Backend
-  shell: |
-    cd /home/ec2-user/
-    tar xvzf artifact.tar.gz -C .
-    ls -la
-    
-- name: Install Node 
-  shell: |
-    cd /home/ec2-user/backend
-    npm install
-    npm install --only=dev
-- name: Build package
-  shell: |
-    cd /home/ec2-user/backend
-    npm run build
-    cat .env
-    npm run prestart:prod
-- name: Start PM2
-  shell: |
-    cd /home/ec2-user/backend
-    pm2 stop default
-    pm2 start npm --name backend -- start
-- name: start pm2 for dist/main.js
-  become: no
-  shell: pm2 start main.js
-  args:
-    chdir: /home/ec2-user/backend/dist
-    
-    
+  - name: Start PM2
+    become: true
+    shell: |
+      cd /home/ubuntu/
+      mkdir backend
+      cd backend
+      tar xzf /home/ubuntu/artifact.tar.gz 
+      echo " in backend folder ..f oll files"
+      ls
+      npm install
+      npm run build
+      pm2 start npm -- start
