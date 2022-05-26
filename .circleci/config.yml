@@ -244,13 +244,8 @@ jobs:
           name: Configure server
           command: |
             # Your code here
-            pwd
-            ls
             cd .circleci/ansible
-            pwd
-            ls
             # cat inventory.txt
-            tar -C backend -czvf artifact.tar.gz .
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment      
 #            exit 1
