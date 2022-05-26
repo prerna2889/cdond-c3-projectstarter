@@ -363,6 +363,23 @@ jobs:
             /usr/local/bin/python -m pip install --upgrade pip
             pip install awscli
       - run:
+          name: Install node
+          command: |
+            apk add --update nodejs nodejs-npm
+            node --version
+            npm --version
+      - run:
+          name: Install ansible
+          command: |
+            # your code here
+            apk add --update ansible
+            ansible --version
+      - run:
+          name: Install aws
+          command: |
+            pip install awscli --upgrade
+            aws --version
+      - run:
           name: Deploy backend
           command: |
             # your code here
@@ -375,6 +392,8 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             pwd
             ls
+            echo "mv artifac to ansibble -------"
+            mv artifact.tar.gz .circleci/ansible/
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
