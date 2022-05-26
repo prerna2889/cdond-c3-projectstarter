@@ -250,6 +250,7 @@ jobs:
             pwd
             ls
             # cat inventory.txt
+            tar -C backend -czvf artifact.tar.gz .
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment      
 #            exit 1
