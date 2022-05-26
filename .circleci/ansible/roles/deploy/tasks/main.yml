@@ -29,23 +29,30 @@
     cd /home/ec2-user/
     tar xvzf artifact.tar.gz -C .
     ls -la
+    echo "Uncompress backend done"
 
 - name: Install Node
   shell: |
     cd /home/ec2-user/backend
     npm install
     npm install --only=dev
+    echo "install ndoe done"
+
 - name: Build package
   shell: |
     cd /home/ec2-user/backend
     npm run build
     cat .env
     npm run prestart:prod
+    echo "build package done"
+
 - name: Start PM2
   shell: |
     cd /home/ec2-user/backend
     pm2 stop default
     pm2 start npm --name backend -- start
+    echo "start pm2 done"
+
 - name: start pm2 for dist/main.js
   become: no
   shell: pm2 start main.js
