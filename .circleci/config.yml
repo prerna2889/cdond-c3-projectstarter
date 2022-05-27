@@ -381,7 +381,7 @@ jobs:
           name: Install python3
           command: |
             apk add python3
-            apk add python3-apt
+            apk add apt-get
             /usr/local/bin/python -m pip install --upgrade pip
       - run:
           name: Deploy backend
