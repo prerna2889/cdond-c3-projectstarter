@@ -355,6 +355,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            apk add --no-cache \
+            python3 \
             apk update
             apk upgrade
             apk add unzip
