@@ -378,11 +378,6 @@ jobs:
             pip install awscli --upgrade
             aws --version
       - run:
-          name: Install python3
-          command: |
-            apk add python3
-            /usr/local/bin/python -m pip install --upgrade pip
-      - run:
           name: Deploy backend
           command: |
             # your code here
