@@ -355,15 +355,11 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add python3
             apk update
             apk upgrade
             apk add unzip
             apk add curl
-            apk add --update ansible
-            apk add --update nodejs npm
             /usr/local/bin/python -m pip install --upgrade pip
-            pip install awscli
       - run:
           name: Install node
           command: |
@@ -381,6 +377,11 @@ jobs:
           command: |
             pip install awscli --upgrade
             aws --version
+      - run:
+          name: Install python3
+          command: |
+            apk install python3
+            /usr/local/bin/python -m pip install --upgrade pip
       - run:
           name: Deploy backend
           command: |
