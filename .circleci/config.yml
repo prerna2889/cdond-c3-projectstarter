@@ -380,7 +380,7 @@ jobs:
       - run:
           name: Install python3
           command: |
-            apk install python3
+            apk add python3
             /usr/local/bin/python -m pip install --upgrade pip
       - run:
           name: Deploy backend
