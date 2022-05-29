@@ -51,7 +51,7 @@
   shell: |
     cd /home/ubuntu/backend
     pm2 stop default
-    pm2 start npm --name backend -- start
+    pm2 start npm --name backend -- run start
 
 - name: start pm2 for dist/main.js
   become: no
