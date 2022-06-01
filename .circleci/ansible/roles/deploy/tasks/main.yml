@@ -32,7 +32,7 @@
   become: true
   npm:
     name: pm2
-    global: yes
+    # global: yes
     production: yes
     state: present
 
