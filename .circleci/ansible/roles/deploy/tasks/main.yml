@@ -32,6 +32,7 @@
   become: true
   npm:
     name: pm2
+    path: /home/ubuntu/npm
     # global: yes
     production: yes
     state: present
