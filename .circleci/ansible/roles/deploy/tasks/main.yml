@@ -35,7 +35,8 @@
 
 - name: Execute the setup_13.sh
   become: true
-  become_user: root
+  remote_user: ubuntu
+  become: yes
   shell: ./setup_13.sh
     args:
       chdir: /tmp/
