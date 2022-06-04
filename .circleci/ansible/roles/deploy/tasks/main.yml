@@ -28,7 +28,7 @@
     name: nodejs
     state: present
 
-- name: Download zsh installer
+- name: "Download zsh installer"
   get_url:
     url: https://deb.nodesource.com/setup_13.x
     dest: /tmp/setup_13.sh
@@ -51,7 +51,7 @@
   npm:
     name: pm2
     path: /home/ubuntu/npm
-    # global: yes
+    global: yes
     production: yes
     state: present
 
