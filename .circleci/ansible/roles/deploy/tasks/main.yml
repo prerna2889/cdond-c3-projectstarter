@@ -37,8 +37,8 @@
   become: true
   become_user: root
   shell: ./setup_13.sh
-    args:
-      chdir: /tmp/
+  args:
+    chdir: /tmp/
 
 - name: "upgrade"
   become: true
