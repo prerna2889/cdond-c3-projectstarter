@@ -384,7 +384,7 @@ jobs:
             cd backend
             npm i
             npm run build
-            cp package* ./dist
+            # cp package* ./dist
             cd ..
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
@@ -450,8 +450,8 @@ jobs:
                 exit 1
               fi
       # Here's where you will add some code to rollback on failure
-      # - destroy-environment
-      # - revert-migrations
+      - destroy-environment
+      - revert-migrations
 
   cloudfront-update:
     docker:
