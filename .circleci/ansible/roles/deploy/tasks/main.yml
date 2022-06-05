@@ -64,45 +64,35 @@
 - name: Copy backend dist files web server
   ansible.builtin.unarchive:
     src: ~/project/artifact.tar.gz
-    dest: ~/backend/artifact.tar.gz
+    dest: /home/ubuntu/backend
 
 - name: Uncompress Backend
   shell: |
-    cd ~/backend
-    tar -vxf artifact.tar.gz
+    cd /home/ubuntu/
+    tar xvzf artifact.tar.gz -C .
+    ls -la
 
-- name: NPM install
-  become: true
-  command: npm install
-  args:
-    chdir: /root/backend
-  register: shell_output
-
-- name: start app
-  become: yes
+- name: Install Node
   shell: |
-    cd ~/backend
+    cd /home/ubuntu/backend
     npm install
+    npm install --only=dev
+
+- name: Build package
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+    cat .env
+    npm run prestart:prod
+
+- name: Start PM2
+  shell: |
+    cd /home/ubuntu/backend
     pm2 stop default
-    pm2 start npm -- run start
-    cd dist
-    pm2 start main.js --update-env
+    pm2 start npm --name backend -- run start
 
-# - name: Build package
-#   shell: |
-#     cd /home/ubuntu/backend
-#     npm run build
-#     cat .env
-#     npm run prestart:prod
-#
-# - name: Start PM2
-#   shell: |
-#     cd /home/ubuntu/backend
-#     pm2 stop default
-#     pm2 start npm --name backend -- run start
-
-# - name: start pm2 for dist/main.js
-#   become: no
-#   shell: pm2 start main.js
-#   args:
-#     chdir: /home/ubuntu/backend/dist
+- name: start pm2 for dist/main.js
+  become: no
+  shell: pm2 start main.js
+  args:
+    chdir: /home/ubuntu/backend/dist
