@@ -63,7 +63,7 @@
 
 - name: Copy backend dist files web server
   ansible.builtin.unarchive:
-    src: artifact.tar.gz
+    src: ~/project/artifact.tar.gz
     dest: /home/ubuntu/backend
 
 - name: Uncompress Backend
