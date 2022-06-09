@@ -392,6 +392,7 @@ jobs:
               echo TYPEORM_USERNAME=postgres > backend/.env
               echo TYPEORM_PASSWORD=mypassword > backend/.env
               echo TYPEORM_DATABASE=postgres > backend/.env
+              # added env variables
       - run:
           name: Deploy backend
           command: |
