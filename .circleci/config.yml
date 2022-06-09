@@ -35,7 +35,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/RjGyoa4CD28AApcpH4SgJT/migration_<< parameters.workflow_id >>)
-            if (( $SUCCESS == 1 ));
+            if(( $SUCCESS==1 ));
             then
                 cd ~/project/backend
                 npm install
@@ -465,7 +465,6 @@ jobs:
                 exit 1
               fi
       # Here's where you will add some code to rollback on failure
-      #revert
       - destroy-environment
       - revert-migrations
 
@@ -486,11 +485,22 @@ jobs:
           name: Update cloudfront distribution
           command: |
             # your code here
+            export OldWorkflowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --no-paginate --output text)
+            echo $OldWorkflowID >> ~/OldWorkflowID.txt
+            cat ~/OldWorkflowID.txt
             aws cloudformation deploy \
-            --template-file .circleci/files/cloudfront.yml \
-            --stack-name InitialStack \
-            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --tags project=udapeople
+              --template-file .circleci/files/cloudfront.yml \
+              --stack-name myStack-udapeople \
+              --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - OldWorkflowID.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations  
