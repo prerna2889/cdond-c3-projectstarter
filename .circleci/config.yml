@@ -487,8 +487,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
-            yum -y install nodejs 
+              yum -y install tar gzip
       - run:
           name: Update cloudfront distribution
           command: |
