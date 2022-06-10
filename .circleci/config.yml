@@ -542,6 +542,7 @@ jobs:
               cat ~/OldWorkflowID.txt
               OldWorkflowID=$(cat ~/OldWorkflowID.txt)
               echo OldWorkflowID: "${OldWorkflowID}"
+              echo ${OldWorkflowID:11:7}
               if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID:11:7}" ]]
               then
                 echo "--------delete confirmed--------"
@@ -586,7 +587,8 @@ workflows:
       #     requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - cloudfront-update:
+            # requires: [smoke-test]
+            requires: [deploy-infrastructure]
+      - cleanup:
+            requires: [cloudfront-update]
