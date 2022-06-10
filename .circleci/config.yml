@@ -530,26 +530,21 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Get old stack workflow id
+          name: Get old stack workflow id and Remove files:
           command: |
               export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
               export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
               echo OldWorkflowID: "${OldWorkflowID}"
               echo Stacks: "${STACKS[@]}"
-      - run:
-          name: Remove old stacks and files
-          command: |
-              cat ~/OldWorkflowID.txt
-              OldWorkflowID=$(cat ~/OldWorkflowID.txt)
-              echo OldWorkflowID: "${OldWorkflowID}"
-              echo ${OldWorkflowID:10:7}
-              if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID:10:7}" ]]
+              echo Stacks: "${STACKS[0]}"
+              echo Stacks: "${STACKS[1]}"
+              echo Stacks: "${STACKS[2]}"
+              if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
               then
                 echo "--------delete confirmed--------"
-                aws s3 rm s3://udapeople-${OldWorkflowID:10:7} --recursive
-                aws s3api delete-bucket --bucket udapeople-${OldWorkflowID:10:7}
-                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID:10:7}"
-                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID:10:7}"
+                aws s3 rb s3://udapeople-${OldWorkflowID} --recursive
+                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               else
                 echo "-------cannot delete--------"
               fi
@@ -562,21 +557,21 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]
       - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [master]
+          # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          # filters:
+          #   branches:
+          #     only: [master]
       # - configure-infrastructure:
       #     requires: [deploy-infrastructure]
       # - run-migrations:
