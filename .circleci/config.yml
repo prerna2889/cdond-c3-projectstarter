@@ -481,7 +481,7 @@ jobs:
   cloudfront-update:
     docker:
       # Docker image here that supports AWS CLI
-      - image: amazon/aws-cli
+      - image: cimg/python:3.9
     steps:
       # Checkout code from git
       - checkout
@@ -508,10 +508,10 @@ jobs:
             --tags project=udapeople
             # echo OldWorkflowID: "${OldWorkflowID}"
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-      #       - OldWorkflowID.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - OldWorkflowID.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
@@ -528,7 +528,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum -y install tar gzip
+            sudo apt-get install -y curl tar gzip
+            pip3 install awscli
       - attach_workspace:
           at: ~/
       - run:
