@@ -485,6 +485,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -493,7 +495,7 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-            # your code here
+            your code here
             export OldWorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text)
@@ -504,12 +506,12 @@ jobs:
             --stack-name InitialStack \
             --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
-            echo OldWorkflowID: "${OldWorkflowID}"
+            # echo OldWorkflowID: "${OldWorkflowID}"
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - OldWorkflowID.txt
+      # - persist_to_workspace:
+      #     root: ~/
+      #     paths:
+      #       - OldWorkflowID.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
@@ -530,7 +532,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Get old stack workflow id and Remove files
+          name: Get old stack workflow id
           command: |
               export OldWorkflowID=$(aws cloudformation \list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                      --no-paginate --output text)
@@ -541,12 +543,15 @@ jobs:
                              --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
               echo Stack names: "${STACKS[@]}"
               echo ${OldWorkflowID:11:7}
-              if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID:11:7}" ]]
+      - run:
+          name: Remove old stacks and files
+          command: |
+              if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID:10:7}" ]]
               then
                 echo "--------delete confirmed--------"
                 aws s3 rb "s3://${OldWorkflowID}" --force
-                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID:11:7}"
-                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID:11:7}"
+                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID:10:7}"
+                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID:10:7}"
               else
                 echo "-------cannot delete--------"
               fi
@@ -575,17 +580,17 @@ workflows:
           #   branches:
           #     only:
           #       - main
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]
+      # - run-migrations:
+      #     requires: [configure-infrastructure]
+      # - deploy-frontend:
+      #     requires: [run-migrations]
+      # - deploy-backend:
+      #     requires: [run-migrations]
+      # - smoke-test:
+      #     requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
-          requires: [smoke-test]
+          # requires: [smoke-test]
       - cleanup:
           requires: [cloudfront-update]
