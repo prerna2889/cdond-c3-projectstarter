@@ -521,7 +521,7 @@ jobs:
 
   cleanup:
     docker:
-      - image: amazon/aws-cli
+      - image: amazon/aws-cli  
       - run:
           name: Install dependencies
           command: |
