@@ -543,7 +543,7 @@ jobs:
               if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
               then
                 echo "--------delete confirmed--------"
-                aws s3 rm "s3://udapeople-${OldWorkflowID}" --force
+                aws s3 rb "s3://udapeople-${OldWorkflowID}" --force
                 aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
                 aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               else
@@ -570,9 +570,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-            # filters:
-            # branches:
-            #   only: [master]
+            filters:
+            branches:
+              only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
