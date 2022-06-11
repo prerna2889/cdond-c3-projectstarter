@@ -522,7 +522,7 @@ jobs:
   cleanup:
     docker:
       # Docker image here
-      - image: circleci/node:13.8.0
+      - image: camazon/aws-cli
     steps:
       # Checkout code from git
       - checkout
@@ -531,8 +531,8 @@ jobs:
       #     command: |
       #       sudo apt-get install -y curl tar gzip
       #       pip3 install awscli
-      - attach_workspace:
-          at: ~/
+      # - attach_workspace:
+      #     at: ~/
       - run:
           name: Get old stack workflow id
           command: |
