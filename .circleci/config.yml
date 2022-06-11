@@ -521,15 +521,15 @@ jobs:
 
   cleanup:
     docker:
-      - image: amazon/aws-cli  
+      - image: amazon/aws-cli
+    steps:
+      - checkout
       - run:
           name: Install dependencies
           command: |
             yum -y install tar gzip
       - attach_workspace:
           at: ~/
-    steps:
-      - checkout
       - run:
           name: Get old stack workflow id
           command: |
