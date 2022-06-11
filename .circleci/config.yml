@@ -548,7 +548,7 @@ jobs:
             cat ~/OldWorkflowID.txt
             OldWorkflowID=$(cat ~/OldWorkflowID.txt)
             echo OldWorkflowID: "${OldWorkflowID}"
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
                echo "---deleting---"
               aws s3 rb "s3://${OldWorkflowID:10:7}}" --force
