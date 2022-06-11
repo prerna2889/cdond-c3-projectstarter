@@ -481,7 +481,7 @@ jobs:
   cloudfront-update:
     docker:
       # Docker image here that supports AWS CLI
-      - image: python:3.7-alpine3.11
+      - image: cimg/python:3.9
     steps:
       # Checkout code from git
       - checkout
@@ -491,8 +491,8 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update curl nodejs npm
-            pip install awscli
+            sudo apt-get install -y curl tar gzip
+            pip3 install awscli
       - run:
           name: Update cloudfront distribution
           command: |
